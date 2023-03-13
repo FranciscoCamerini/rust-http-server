@@ -6,7 +6,7 @@ pub struct Server {
     addr: String,
 }
 
-impl Server{
+impl Server {
     pub fn new(addr: String) -> Self {
         Self { addr }
     }
@@ -21,27 +21,25 @@ impl Server{
                 Ok((mut stream, _)) => {
                     let mut buffer = [0; 1024];
                     match stream.read(&mut buffer) {
-                        Ok(_) => {
-                            match Request::try_from(&buffer[..]) {
-                                Ok(request) => {
-                                    println!(
-                                        "Received request to the following path: \n\n{}",
-                                        request.path
-                                    )
-                                },
-                                Err(e) => {
-                                    println!("Failed to parse a request: {}", e);
-                                }
+                        Ok(_) => match Request::try_from(&buffer[..]) {
+                            Ok(request) => {
+                                println!(
+                                    "Received request to the following path: \n\n{}",
+                                    request.path
+                                )
+                            }
+                            Err(e) => {
+                                println!("Failed to parse a request: {}", e);
                             }
                         },
                         Err(e) => {
                             print!("Failed to read from connection: {}", e)
-                        },
+                        }
                     }
-                },
+                }
                 Err(e) => {
                     println!("Failed to establish connection: {}", e);
-                },
+                }
             }
         }
     }

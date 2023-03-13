@@ -10,7 +10,7 @@ pub struct Request<'buffer> {
     pub method: Method,
 }
 
-impl<'buffer>TryFrom<&'buffer [u8]> for Request<'buffer> {
+impl<'buffer> TryFrom<&'buffer [u8]> for Request<'buffer> {
     type Error = ParseError;
 
     fn try_from(buffer: &'buffer [u8]) -> Result<Request<'buffer>, Self::Error> {

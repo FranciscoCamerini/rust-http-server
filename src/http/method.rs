@@ -9,7 +9,7 @@ pub enum Method {
     CONNECT,
     OPTIONS,
     TRACE,
-    PATCH
+    PATCH,
 }
 
 impl FromStr for Method {
