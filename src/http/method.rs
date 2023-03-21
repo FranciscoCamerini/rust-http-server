@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 pub enum Method {
     GET,
@@ -27,6 +27,22 @@ impl FromStr for Method {
             "TRACE" => Ok(Self::TRACE),
             "PATCH" => Ok(Self::PATCH),
             _ => Err(MethodError),
+        }
+    }
+}
+
+impl Display for Method {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match *self {
+            Self::GET => write!(f, "GET"),
+            Self::DELETE => write!(f, "DELETE"),
+            Self::POST => write!(f, "POST"),
+            Self::PUT => write!(f, "PUT"),
+            Self::HEAD => write!(f, "HEAD"),
+            Self::CONNECT => write!(f, "CONNECT"),
+            Self::OPTIONS => write!(f, "OPTIONS"),
+            Self::TRACE => write!(f, "TRACE"),
+            Self::PATCH => write!(f, "PATCH"),
         }
     }
 }

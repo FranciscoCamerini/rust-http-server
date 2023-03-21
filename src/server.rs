@@ -13,9 +13,12 @@ impl Server {
     }
 
     pub fn run(self) {
-        info!("Initializing server. Listening on {}", self.addr);
-
+        info!("Initializing server.");
         let listener = TcpListener::bind(&self.addr).unwrap();
+        info!(
+            "Server successfully initialized. Listening for connections on {}",
+            self.addr
+        );
 
         loop {
             match listener.accept() {
@@ -24,7 +27,7 @@ impl Server {
                     match stream.read(&mut buffer) {
                         Ok(_) => match Request::try_from(&buffer[..]) {
                             Ok(request) => {
-                                info!("Received request to the following path: {}", request.path)
+                                info!("{} {}", request.method, request.path)
                             }
                             Err(e) => {
                                 warn!("Failed to parse a request: {}", e);
