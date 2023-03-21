@@ -1,4 +1,5 @@
 use crate::http::Request;
+use log::{info, warn};
 use std::io::Read;
 use std::net::TcpListener;
 
@@ -12,7 +13,7 @@ impl Server {
     }
 
     pub fn run(self) {
-        println!("Listening on {}", self.addr);
+        info!("Initializing server. Listening on {}", self.addr);
 
         let listener = TcpListener::bind(&self.addr).unwrap();
 
@@ -23,22 +24,19 @@ impl Server {
                     match stream.read(&mut buffer) {
                         Ok(_) => match Request::try_from(&buffer[..]) {
                             Ok(request) => {
-                                println!(
-                                    "Received request to the following path: \n\n{}",
-                                    request.path
-                                )
+                                info!("Received request to the following path: {}", request.path)
                             }
                             Err(e) => {
-                                println!("Failed to parse a request: {}", e);
+                                warn!("Failed to parse a request: {}", e);
                             }
                         },
                         Err(e) => {
-                            print!("Failed to read from connection: {}", e)
+                            warn!("Failed to read from connection: {}", e)
                         }
                     }
                 }
                 Err(e) => {
-                    println!("Failed to establish connection: {}", e);
+                    warn!("Failed to establish connection: {}", e);
                 }
             }
         }
