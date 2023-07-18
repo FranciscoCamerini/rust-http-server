@@ -1,5 +1,6 @@
 use std::{fmt::Display, str::FromStr};
 
+#[derive(Debug)]
 pub enum Method {
     GET,
     DELETE,

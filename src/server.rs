@@ -27,7 +27,7 @@ impl Server {
                     match stream.read(&mut buffer) {
                         Ok(_) => match Request::try_from(&buffer[..]) {
                             Ok(request) => {
-                                info!("{} {}", request.method, request.path)
+                                dbg!(request);
                             }
                             Err(e) => {
                                 warn!("Failed to parse a request: {}", e);
