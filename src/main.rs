@@ -1,12 +1,12 @@
 #[allow(dead_code)]
 mod http;
+mod router;
 mod server;
-mod website_handler;
 
 use env_logger;
+use router::Router;
 use server::Server;
 use std::env;
-use website_handler::WebsiteHandler;
 
 fn setup_log() {
     env::set_var("RUST_LOG", "http_server");
@@ -16,5 +16,5 @@ fn setup_log() {
 fn main() {
     setup_log();
     let server = Server::new("127.0.0.1:8080".to_string());
-    server.run(WebsiteHandler);
+    server.run(Router);
 }

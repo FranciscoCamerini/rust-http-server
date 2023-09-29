@@ -7,7 +7,7 @@ pub trait Handler {
     fn handle_request(&mut self, request: &Request) -> Response;
 
     fn handle_bas_request(&mut self, e: &ParseError) -> Response {
-        println!("Failed to parse request: {}", e);
+        info!("Failed to parse request: {}", e);
         Response::new(StatusCode::BadRequest, None)
     }
 }
@@ -36,11 +36,20 @@ impl Server {
                     match stream.read(&mut buffer) {
                         Ok(_) => {
                             let response = match Request::try_from(&buffer[..]) {
-                                Ok(request) => handler.handle_request(&request),
+                                Ok(request) => {
+                                    let response = handler.handle_request(&request);
+                                    info!(
+                                        "{} {} => {}",
+                                        request.method(),
+                                        request.path(),
+                                        response.status_code()
+                                    );
+                                    response
+                                }
                                 Err(e) => handler.handle_bas_request(&e),
                             };
                             if let Err(e) = response.send(&mut stream) {
-                                println!("Failed to send response: {}", e);
+                                info!("Failed to send response: {}", e);
                             }
                         }
                         Err(e) => {
